@@ -98,7 +98,7 @@ const plans = {
       { date: '7/28(화)', absent: [] },
       { date: '8/4(화)', absent: ['최가현 (일본여행)'] },
       { date: '8/11(화)', absent: [] },
-      { date: '8/18(화)', absent: ['최가현 (대만여행)'] },
+      { date: '8/18(화)', absent: ['최가현 (대만여행)', '한민서 (개인 일정)'] },
       { date: '8/25(화)', absent: ['김은서 (여행)'] }
     ]
   },
@@ -115,7 +115,7 @@ const plans = {
   fri: {
     title: '금요일 15:00~18:00 · 힙합 (총 5회)',
     sessions: [
-      { date: '7/31(금)', absent: [] },
+      { date: '7/31(금)', absent: [], late: ['김하진 (ㄷㄷㄷ, 17시쯤부터)'] },
       { date: '8/7(금)', absent: [] },
       { date: '8/14(금)', absent: [] },
       { date: '8/21(금)', absent: [] },
@@ -139,6 +139,9 @@ function renderPlan(key) {
     } else {
       html += '<div class="warn">불참 ' + s.absent.length + '명</div>';
       s.absent.forEach(a => { html += '<div class="name">- ' + a + '</div>'; });
+    }
+    if (s.late && s.late.length) {
+      s.late.forEach(a => { html += '<div class="name">- 늦참 ' + a + '</div>'; });
     }
     html += '</div>';
   });
@@ -169,7 +172,7 @@ const members = [
   ['박정운', '브레이킹', '화 0회, 목 0회', '0 / 10'],
   ['이주윤', '브레이킹', '화 0회, 목 0회', '0 / 10'],
   ['천영서', '브레이킹', '화 0회, 목 0회', '0 / 10'],
-  ['한민서', '브레이킹', '화 0회, 목 0회', '0 / 10'],
+  ['한민서', '브레이킹', '화 1회, 목 0회', '1 / 10'],
   ['윤영빈', '브레이킹', '화 0회, 목 0회', '0 / 10']
 ];
 
