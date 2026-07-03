@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>26 걸힙브 버스킹 연습일정 공지</title>
 <style>
   body {
@@ -62,10 +63,234 @@
   .card .name { font-size: 12px; color: #666; }
 
   .appendix-title { margin: 2rem 0 0.75rem; font-size: 14px; color: #666; }
+  .change-notice {
+    margin: 1.75rem 0 0.85rem;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #f3c7c7;
+    background: #fff5f5;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .change-notice .change-item {
+    display: block;
+  }
+  .change-notice .change-label {
+    display: inline-block;
+    min-width: 5.5em;
+    margin-right: 0.4rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: #fde8e8;
+    color: #9f2d2d;
+    border: 1px solid #f0b9b9;
+    font-weight: 700;
+    font-size: 12px;
+    vertical-align: baseline;
+  }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th { text-align: left; padding: 6px 4px; font-weight: 500; color: #666; border-bottom: 0.5px solid #b4b2a9; }
   td { padding: 6px 4px; border-bottom: 0.5px solid #e5e5e5; }
   th:last-child, td:last-child { text-align: center; }
+
+  .member-list {
+    display: none;
+    gap: 8px;
+  }
+
+  .member-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 0.75rem;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .member-card .member-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .member-card .member-meta {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 640px) {
+    body {
+      padding: 1rem;
+      max-width: none;
+    }
+
+    .title {
+      font-size: 22px;
+      line-height: 1.35;
+      margin-bottom: 1rem;
+    }
+
+    .tabs {
+      gap: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .tab-btn {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 12px;
+      text-align: left;
+      line-height: 1.25;
+    }
+
+    .plan-title {
+      font-size: 13px;
+      margin: 0.5rem 0 0.75rem;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .card {
+      padding: 0.7rem;
+    }
+
+    .card .date {
+      font-size: 13px;
+    }
+
+    .card .time,
+    .card .ok,
+    .card .warn,
+    .card .name {
+      font-size: 11px;
+    }
+
+    .appendix-title {
+      margin: 1.5rem 0 0.5rem;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .change-notice {
+      margin: 1.35rem 0 0.75rem;
+      padding: 0.8rem 0.85rem;
+      font-size: 12px;
+      line-height: 1.5;
+      background: #fff5f5;
+      border: 1px solid #f3c7c7;
+      border-radius: 10px;
+    }
+
+    .change-notice .change-label {
+      min-width: 5.2em;
+      font-size: 11px;
+      padding: 0.08rem 0.4rem;
+      color: #9f2d2d;
+      background: #fde8e8;
+      border: 1px solid #f0b9b9;
+    }
+
+    #appendix {
+      overflow: visible;
+    }
+
+    .appendix-table {
+      display: none;
+    }
+
+    .member-list {
+      display: grid;
+    }
+
+    .member-card .member-name {
+      font-size: 13px;
+    }
+
+    .member-card .member-meta {
+      font-size: 11px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    body {
+      padding: 0.75rem;
+    }
+
+    .title {
+      font-size: 20px;
+      margin-bottom: 0.85rem;
+    }
+
+    .tabs {
+      gap: 3px;
+      margin-bottom: 0.85rem;
+    }
+
+    .tab-btn {
+      padding: 7px 9px;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .plan-title {
+      font-size: 12px;
+      margin: 0.4rem 0 0.65rem;
+    }
+
+    .grid {
+      gap: 8px;
+    }
+
+    .card {
+      padding: 0.65rem;
+    }
+
+    .card .date {
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .card .time,
+    .card .ok,
+    .card .warn,
+    .card .name {
+      font-size: 10px;
+    }
+
+    .appendix-title {
+      margin: 1.25rem 0 0.45rem;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .change-notice {
+      margin: 1.1rem 0 0.65rem;
+      padding: 0.72rem 0.75rem;
+      font-size: 11px;
+    }
+
+    .change-notice .change-label {
+      min-width: 5em;
+      font-size: 10px;
+    }
+
+    .member-card {
+      padding: 0.65rem;
+    }
+
+    .member-card .member-name {
+      font-size: 12px;
+    }
+
+    .member-card .member-meta {
+      font-size: 10px;
+      line-height: 1.4;
+    }
+  }
 </style>
 </head>
 <body>
@@ -82,8 +307,11 @@
 <div id="panel-thu" class="panel"></div>
 <div id="panel-fri" class="panel"></div>
 
-<div class="appendix-title"> [변경사항1] : 8/21(금) - 힙합 13:00-16:00 으로 연습시간 변경합니다!<br>
-  [변경사항2] : 7/28(화) - #### 연습시간 변경합니다!</div>
+
+<div class="change-notice">
+  <span class="change-item"><span class="change-label">변경사항 1</span>8/21(금) - 힙합 13:00-16:00에 진행합니다!</span>
+  <span class="change-item"><span class="change-label">변경사항 2</span>7/28(화) - #### 연습시간 변경합니다!</span>
+</div>
 <div class="appendix-title">부록 · 안무원별 불참 횟수 (전체 연습 횟수 대비)</div>
 <div id="appendix"></div>
 
@@ -182,13 +410,26 @@ const members = [
   ['윤영빈', '브레이킹', '화 0회, 목 0회', '0 / 10']
 ];
 
-let table = '<table>';
+let table = '<table class="appendix-table">';
 table += '<tr><th>이름</th><th>파트</th><th>요일별 불참</th><th>총 불참/총 횟수</th></tr>';
 members.forEach(m => {
   table += '<tr><td>' + m[0] + '</td><td>' + m[1] + '</td><td>' + m[2] + '</td><td>' + m[3] + '</td></tr>';
 });
 table += '</table>';
-document.getElementById('appendix').innerHTML = table;
+
+let memberCards = '<div class="member-list">';
+members.forEach(m => {
+  memberCards += '<div class="member-card">';
+  memberCards += '<div class="member-name">' + m[0] + '</div>';
+  memberCards += '<div class="member-meta">파트: ' + m[1] + '</div>';
+  memberCards += '<div class="member-meta">요일별 불참: ' + m[2] + '</div>';
+  memberCards += '<div class="member-meta">총 불참/총 횟수: ' + m[3] + '</div>';
+  memberCards += '</div>';
+});
+memberCards += '</div>';
+
+const appendix = document.getElementById('appendix');
+appendix.innerHTML = table + memberCards;
 </script>
 
 </body>
