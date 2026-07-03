@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>26 걸힙브 버스킹 연습일정 공지</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    padding: 2rem;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .title {
+    font-size: 27px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 0.5px solid #b4b2a9;
+    background: transparent;
+    color: #1a1a1a;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .tab-btn.active-tue { background: #E6F1FB; border-color: #378ADD; color: #0C447C; }
+  .tab-btn.active-thu { background: #EAF3DE; border-color: #639922; color: #27500A; }
+  .tab-btn.active-fri { background: #FAEEDA; border-color: #BA7517; color: #633806; }
+
+  .panel { display: none; }
+  .panel.show { display: block; }
+
+  .plan-title { font-size: 14px; font-weight: 500; margin: 0.75rem 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .card {
+    border-left: 4px solid #85B7EB;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    background: #ffffff;
+    padding: 0.75rem;
+  }
+  .card.absent { border-left-color: #B4B2A9; }
+  .card .date { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .card .ok { font-size: 12px; color: #666; }
+  .card .warn { font-size: 12px; color: #A32D2D; margin-bottom: 2px; }
+  .card .name { font-size: 12px; color: #666; }
+
+  .appendix-title { margin: 2rem 0 0.75rem; font-size: 14px; color: #666; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 6px 4px; font-weight: 500; color: #666; border-bottom: 0.5px solid #b4b2a9; }
+  td { padding: 6px 4px; border-bottom: 0.5px solid #e5e5e5; }
+  th:last-child, td:last-child { text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="title">26 걸힙브 버스킹 연습일정 공지</div>
+
+<div class="tabs">
+  <button class="tab-btn" id="tab-tue" onclick="showTab('tue')">화 19:30-22:30 · 힙합&amp;브레이킹</button>
+  <button class="tab-btn" id="tab-thu" onclick="showTab('thu')">목 16:00-19:00 · 브레이킹</button>
+  <button class="tab-btn" id="tab-fri" onclick="showTab('fri')">금 15:00-18:00 · 힙합</button>
+</div>
+
+<div id="panel-tue" class="panel"></div>
+<div id="panel-thu" class="panel"></div>
+<div id="panel-fri" class="panel"></div>
+
+<div class="appendix-title">부록 · 안무원별 불참 횟수 (본인이 참여하는 세션 대비)</div>
+<div id="appendix"></div>
+
+<script>
+const dayColor = {
+  tue: { strip: '#85B7EB' },
+  thu: { strip: '#97C459' },
+  fri: { strip: '#EF9F27' }
+};
+
+const plans = {
+  tue: {
+    title: '화요일 19:30~22:30 · 힙합&브레이킹 통합 (총 5회)',
+    sessions: [
+      { date: '7/28(화)', absent: [] },
+      { date: '8/4(화)', absent: ['최가현 (일본여행)'] },
+      { date: '8/11(화)', absent: [] },
+      { date: '8/18(화)', absent: ['최가현 (대만여행)'] },
+      { date: '8/25(화)', absent: ['김은서 (여행)'] }
+    ]
+  },
+  thu: {
+    title: '목요일 16:00~19:00 · 브레이킹 (총 5회)',
+    sessions: [
+      { date: '7/30(목)', absent: [] },
+      { date: '8/6(목)', absent: [] },
+      { date: '8/13(목)', absent: [] },
+      { date: '8/20(목)', absent: [] },
+      { date: '8/27(목)', absent: [] }
+    ]
+  },
+  fri: {
+    title: '금요일 15:00~18:00 · 힙합 (총 5회)',
+    sessions: [
+      { date: '7/31(금)', absent: [] },
+      { date: '8/7(금)', absent: [] },
+      { date: '8/14(금)', absent: [] },
+      { date: '8/21(금)', absent: [] },
+      { date: '8/28(금)', absent: [] }
+    ]
+  }
+};
+
+function renderPlan(key) {
+  const p = plans[key];
+  const c = dayColor[key];
+  let html = '<div class="plan-title">' + p.title + '</div>';
+  html += '<div class="grid">';
+  p.sessions.forEach(s => {
+    const ok = s.absent.length === 0;
+    const cardClass = ok ? 'card' : 'card absent';
+    html += '<div class="' + cardClass + '" style="border-left-color:' + (ok ? c.strip : '#B4B2A9') + '">';
+    html += '<div class="date">' + s.date + '</div>';
+    if (ok) {
+      html += '<div class="ok">전원 참석 가능</div>';
+    } else {
+      html += '<div class="warn">불참 ' + s.absent.length + '명</div>';
+      s.absent.forEach(a => { html += '<div class="name">- ' + a + '</div>'; });
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+['tue', 'thu', 'fri'].forEach(k => {
+  document.getElementById('panel-' + k).innerHTML = renderPlan(k);
+});
+
+function showTab(key) {
+  ['tue', 'thu', 'fri'].forEach(k => {
+    document.getElementById('panel-' + k).classList.toggle('show', k === key);
+    document.getElementById('tab-' + k).classList.toggle('active-' + k, k === key);
+  });
+}
+showTab('tue');
+
+const members = [
+  ['최가현', '힙합', '화 2회, 금 0회', '2 / 10'],
+  ['김은서', '힙합', '화 1회, 금 0회', '1 / 10'],
+  ['김하진', '힙합', '화 0회, 금 0회', '0 / 10'],
+  ['이재영', '힙합', '화 0회, 금 0회', '0 / 10'],
+  ['전하윤', '힙합', '화 0회, 금 0회', '0 / 10'],
+  ['홍원철', '힙합', '화 0회, 금 0회', '0 / 10'],
+  ['전유빈', '힙합', '화 0회, 금 0회', '0 / 10'],
+  ['박정운', '브레이킹', '화 0회, 목 0회', '0 / 10'],
+  ['이주윤', '브레이킹', '화 0회, 목 0회', '0 / 10'],
+  ['천영서', '브레이킹', '화 0회, 목 0회', '0 / 10'],
+  ['한민서', '브레이킹', '화 0회, 목 0회', '0 / 10'],
+  ['윤영빈', '브레이킹', '화 0회, 목 0회', '0 / 10']
+];
+
+let table = '<table>';
+table += '<tr><th>이름</th><th>파트</th><th>세션별 불참</th><th>총 불참/총세션</th></tr>';
+members.forEach(m => {
+  table += '<tr><td>' + m[0] + '</td><td>' + m[1] + '</td><td>' + m[2] + '</td><td>' + m[3] + '</td></tr>';
+});
+table += '</table>';
+document.getElementById('appendix').innerHTML = table;
+</script>
+
+</body>
+</html>
