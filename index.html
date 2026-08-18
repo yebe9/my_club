@@ -37,6 +37,7 @@
   .tab-btn.active-tue { background: #E6F1FB; border-color: #378ADD; color: #0C447C; }
   .tab-btn.active-thu { background: #EAF3DE; border-color: #639922; color: #27500A; }
   .tab-btn.active-fri { background: #FAEEDA; border-color: #BA7517; color: #633806; }
+  .tab-btn.active-extra { background: #F3E8FF; border-color: #8B5CF6; color: #4C1D95; }
 
   .panel { display: none; }
   .panel.show { display: block; }
@@ -299,18 +300,22 @@
 
 <div class="tabs">
   <button class="tab-btn" id="tab-tue" onclick="showTab('tue')">화 19:30-22:30 · 힙합&amp;브레이킹</button>
-  <button class="tab-btn" id="tab-thu" onclick="showTab('thu')">목 16:00-19:00 · 브레이킹</button>
+  <button class="tab-btn" id="tab-thu" onclick="showTab('thu')">목 15:00-18:00 · 브레이킹</button>
   <button class="tab-btn" id="tab-fri" onclick="showTab('fri')">금 15:00-18:00 · 힙합</button>
+  <button class="tab-btn" id="tab-extra" onclick="showTab('extra')">추가연습</button>
 </div>
 
 <div id="panel-tue" class="panel"></div>
 <div id="panel-thu" class="panel"></div>
 <div id="panel-fri" class="panel"></div>
+<div id="panel-extra" class="panel"></div>
 
 
 <div class="change-notice">
-  <span class="change-item"><span class="change-label">변경사항 1</span>8/21(금) - 힙합 13:00-16:00에 진행합니다!</span>
-  <span class="change-item"><span class="change-label">변경사항 2</span>7/28(화) 연습 -> 7/29(수) 13:00-16:00으로 변경합니다!</span>
+  <span class="change-item"><span class="change-label">공지사항 1</span>8/21(금) - 힙합 13:00-16:00에 진행합니다.</span>
+  <span class="change-item"><span class="change-label">공지사항 2</span>7/28(화) 연습 -> 7/29(수) 13:00-16:00으로 변경합니다.</span>
+  <span class="change-item"><span class="change-label">공지사항 3</span>9월 첫째 주 연습은 9/4(금) 10:00-13:00에 진행됩니다.</span>
+  <span class="change-item"><span class="change-label">공지사항 4</span>당일 연습은 9/5(토) 12:30-14:30에 진행됩니다.</span>
 </div>
 <div class="appendix-title">부록 · 안무원별 불참 횟수 (전체 연습 횟수 대비)</div>
 <div id="appendix"></div>
@@ -319,7 +324,8 @@
 const dayColor = {
   tue: { strip: '#85B7EB' },
   thu: { strip: '#97C459' },
-  fri: { strip: '#EF9F27' }
+  fri: { strip: '#EF9F27' },
+  extra: { strip: '#B79AF7' }
 };
 
 const plans = {
@@ -329,18 +335,18 @@ const plans = {
       { date: '7/29(수)', time: '13:00~16:00', absent: ['최가현'] },
       { date: '8/4(화)', absent: ['최가현 (일본여행)']},
       { date: '8/11(화)', absent: [], late: ['이주윤, 천영서 (여캠답사, 약 30분 예상)']  },
-      { date: '8/18(화)', absent: ['최가현 (대만여행)', '한민서 (개인일정)'] },
-      { date: '8/25(화)', absent: ['김은서 (여행)'] }
+      { date: '8/18(화)', absent: ['최가현 (대만여행)', '한민서 (개인일정)','박정운 (개인일정)'] },
+      { date: '8/25(화)', absent: ['김은서 (여행)','천영서 (개인일정)','한민서 (개인일정)','박정운 (개인일정)'] }
     ]
   },
   thu: {
-    title: '목요일 16:00~19:00 · 브레이킹 (총 5회)',
+    title: '목요일 15:00~18:00 · 브레이킹 (총 5회)',
     sessions: [
       { date: '7/30(목)', absent: [] },
       { date: '8/6(목)', absent: [] },
       { date: '8/13(목)', absent: [] },
       { date: '8/20(목)', absent: [] },
-      { date: '8/27(목)', absent: [] }
+      { date: '8/27(목)', absent: ['박정운 (개인일정)'] }
     ]
   },
   fri: {
@@ -348,9 +354,17 @@ const plans = {
     sessions: [
       { date: '7/31(금)', absent: [], late: ['김하진 (ㄷㄷㄷ, 17시쯤부터)'] },
       { date: '8/7(금)', absent: [] },
-      { date: '8/14(금)', absent: [] },
+      { date: '8/14(금)', absent: ['이재영(본가)'] },
       { date: '8/21(금)', time: '13:00~16:00', absent: [] },
       { date: '8/28(금)', absent: [] }
+    ]
+  },
+  extra: {
+    title: '추가연습(리허설, 당일, 9월)',
+    sessions: [
+      { date: '8/8(토)', time: '11:00~14:00', absent: ['천영서','최가현'] },
+      { date: '9/4(금)', time: '10:00~13:00', absent: ['이주윤','전하윤'] },
+      { date: '9/5(토)', time: '12:30~14:30', absent: ['전유빈','최가현'], late: ['천영서(반참)'] },
     ]
   }
 };
@@ -369,7 +383,7 @@ function renderPlan(key) {
       html += '<div class="time">' + s.time + '으로 변경</div>';
     }
     if (ok) {
-      html += '<div class="ok">전원 참석 가능</div>';
+      html += '<div class="ok">전원 참석 </div>';
     } else {
       html += '<div class="warn">불참 ' + s.absent.length + '명</div>';
       s.absent.forEach(a => { html += '<div class="name">- ' + a + '</div>'; });
@@ -383,12 +397,12 @@ function renderPlan(key) {
   return html;
 }
 
-['tue', 'thu', 'fri'].forEach(k => {
+['tue', 'thu', 'fri', 'extra'].forEach(k => {
   document.getElementById('panel-' + k).innerHTML = renderPlan(k);
 });
 
 function showTab(key) {
-  ['tue', 'thu', 'fri'].forEach(k => {
+  ['tue', 'thu', 'fri', 'extra'].forEach(k => {
     document.getElementById('panel-' + k).classList.toggle('show', k === key);
     document.getElementById('tab-' + k).classList.toggle('active-' + k, k === key);
   });
@@ -399,15 +413,14 @@ const members = [
   ['최가현', '힙합', '화 3회, 금 0회', '3 / 10'],
   ['김은서', '힙합', '화 1회, 금 0회', '1 / 10'],
   ['김하진', '힙합', '화 0회, 금 0회', '0 / 10'],
-  ['이재영', '힙합', '화 0회, 금 0회', '0 / 10'],
+  ['이재영', '힙합', '화 0회, 금 1회', '1 / 10'],
   ['전하윤', '힙합', '화 0회, 금 0회', '0 / 10'],
   ['홍원철', '힙합', '화 0회, 금 0회', '0 / 10'],
   ['전유빈', '힙합', '화 0회, 금 0회', '0 / 10'],
-  ['박정운', '브레이킹', '화 0회, 목 0회', '0 / 10'],
+  ['박정운', '브레이킹', '화 2회, 목 1회', '3 / 10'],
   ['이주윤', '브레이킹', '화 0회, 목 0회', '0 / 10'],
-  ['천영서', '브레이킹', '화 0회, 목 0회', '0 / 10'],
-  ['한민서', '브레이킹', '화 1회, 목 0회', '1 / 10'],
-  ['윤영빈', '브레이킹', '화 0회, 목 0회', '0 / 10']
+  ['천영서', '브레이킹', '화 2회, 목 0회', '2 / 10'],
+  ['한민서', '브레이킹', '화 2회, 목 0회', '2 / 10'],
 ];
 
 let table = '<table class="appendix-table">';
